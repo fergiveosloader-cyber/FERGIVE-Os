@@ -2,8 +2,8 @@ const { Octokit } = require("@octokit/rest");
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-const OWNER = "solankiyashrajsinh922-cyber";
-const REPO  = "loader-keys";
+const OWNER = "fergiveosloader-cyber";
+const REPO  = "FERGIVE-Os";
 
 async function getFile(path) {
   const { data } = await octokit.repos.getContent({ owner:OWNER, repo:REPO, path });
@@ -145,4 +145,3 @@ module.exports = async (req, res) => {
     res.status(500).json({success:false,message:"Error: "+err.message});
   }
 };
-
