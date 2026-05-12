@@ -1,5 +1,5 @@
 {
   "version": "1.0",
-  "maintenance": true,
+  "maintenance": false,
   "maintenance_msg": "App is currently under maintenance.\nPlease try again later."
 }
