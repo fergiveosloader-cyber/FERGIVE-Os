@@ -2,7 +2,7 @@
   "version": "1.0",
   "zip_url": "https://github.com/fergiveosloader-cyber/FERGIVE-Os/releases/download/V1.0/payload.zip",
   "lib_name": "libil2cpp.so",
-  "maintenance": false,
+  "maintenance": true,
   "maintenance_msg": "Injection is currently under maintenance.\nPlease try again later.",
   "force_update": false,
   "min_version": "1.0"
