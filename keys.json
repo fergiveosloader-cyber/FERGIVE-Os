@@ -85,8 +85,8 @@
     "created_at": "2026-05-13T09:32:54.950Z",
     "expires_at": "2026-05-13T09:42:54.346Z",
     "duration": "",
-    "device_id": null,
-    "locked_at": null,
+    "device_id": "WDX-27DA780557CF",
+    "locked_at": "2026-05-13T09:34:57.706Z",
     "active": true
   }
 }
