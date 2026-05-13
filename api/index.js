@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
 
   try {
 
-    // ── VALIDATE KEY (App) ──────────────────
+    // ── VALIDATE  KEY (App) ──────────────────
     if(action==='validate'){
       const { key, device_id } = req.body||{};
       if(!key){res.json({success:false,message:"Key required!"});return;}
