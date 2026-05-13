@@ -25,14 +25,5 @@
     "device_id": "WDX-27DA780557CF",
     "locked_at": "2026-05-13T09:34:57.706Z",
     "active": true
-  },
-  "FERGIVE-OS-JXVUC-J3DC4": {
-    "label": "No Label",
-    "created_at": "2026-05-13T10:42:13.327Z",
-    "expires_at": "2026-05-23T10:42:12.727Z",
-    "duration": "",
-    "device_id": "WDX-27DA780557CF",
-    "locked_at": "2026-05-13T10:43:15.928Z",
-    "active": true
   }
 }
