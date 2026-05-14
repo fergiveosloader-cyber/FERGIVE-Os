@@ -1,31 +1,35 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "api/index.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "reseller.html",
-      "use": "@vercel/static"
+  "functions": {
+    "api/index.js": {
+      "memory": 128,
+      "maxDuration": 10
     }
-  ],
-  "rewrites": [
+  },
+  "routes": [
     {
-      "source": "/api/:path*",
-      "destination": "/api/index.js"
+      "src": "/api/(.*)",
+      "dest": "/api/index.js"
     },
     {
-      "source": "/:slug/login",
-      "destination": "/reseller.html"
+      "src": "/",
+      "dest": "/index.html"
     },
     {
-      "source": "/:slug",
-      "destination": "/reseller.html"
+      "src": "/index.html",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/reseller.html",
+      "dest": "/reseller.html"
+    },
+    {
+      "src": "/([a-zA-Z0-9_-]+)/login",
+      "dest": "/reseller.html"
+    },
+    {
+      "src": "/([a-zA-Z0-9_-]+)",
+      "dest": "/reseller.html"
     }
   ]
 }
