@@ -2,8 +2,8 @@ const { Octokit } = require("@octokit/rest");
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-const OWNER = "fergiveosloader-cyber";
-const REPO  = "FERGIVE-Os";
+const OWNER = "solankiyashrajsinh922-cyber";
+const REPO  = "loader-keys";
 
 async function getFile(path) {
   const { data } = await octokit.repos.getContent({ owner:OWNER, repo:REPO, path });
@@ -22,33 +22,10 @@ async function updateFile(path, data, sha, msg) {
   });
 }
 
-// Try to get resellers.json, create if not exists
-async function getResellers() {
-  try {
-    return await getFile('resellers.json');
-  } catch(e) {
-    // File doesn't exist yet, create it
-    await octokit.repos.createOrUpdateFileContents({
-      owner:OWNER, repo:REPO, path:'resellers.json',
-      message:'Init resellers.json',
-      content: Buffer.from(JSON.stringify({},null,2)).toString('base64'),
-    });
-    return { data: {}, sha: null };
-  }
-}
-
-function rp(){
-  const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let s='';
-  for(let i=0;i<5;i++) s+=c[Math.floor(Math.random()*c.length)];
-  return s;
-}
-function makeKey(){ return `FERGIVE-OS-${rp()}-${rp()}`; }
-
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin','*');
   res.setHeader('Access-Control-Allow-Methods','GET,POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers','Content-Type,x-admin-token,x-reseller-token');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type,x-admin-token');
   if(req.method==='OPTIONS'){res.status(200).end();return;}
 
   const action = req.query.action || req.body?.action;
@@ -60,6 +37,7 @@ module.exports = async (req, res) => {
       const { key, device_id } = req.body||{};
       if(!key){res.json({success:false,message:"Key required!"});return;}
 
+      // Maintenance check
       try{
         const {data:v} = await getFile('version.json');
         if(v.maintenance){
@@ -91,74 +69,6 @@ module.exports = async (req, res) => {
       }
 
       res.json({success:true,label:e.label||"User",expires_at:e.expires_at});
-      return;
-    }
-
-    // ── RESELLER LOGIN ──────────────────────
-    if(action==='reseller_login'){
-      const { username, password } = req.body||{};
-      if(!username||!password){res.json({success:false,message:"Username and password required!"});return;}
-      const {data:resellers} = await getResellers();
-      const slug = username.toLowerCase();
-      if(!resellers[slug]){res.json({success:false,message:"Reseller not found!"});return;}
-      if(resellers[slug].password!==password){res.json({success:false,message:"Wrong password!"});return;}
-      if(resellers[slug].active===false){res.json({success:false,message:"Account disabled!"});return;}
-      res.json({
-        success:true,
-        reseller:{
-          username:slug,
-          name:resellers[slug].name||slug,
-          credits:resellers[slug].credits||0
-        }
-      });
-      return;
-    }
-
-    // ── RESELLER GET INFO ───────────────────
-    if(action==='reseller_info'){
-      const { username, password } = req.body||{};
-      if(!username||!password){res.json({success:false,message:"Unauthorized!"});return;}
-      const {data:resellers} = await getResellers();
-      const slug = username.toLowerCase();
-      if(!resellers[slug]||resellers[slug].password!==password){
-        res.json({success:false,message:"Unauthorized!"});return;
-      }
-      res.json({success:true,credits:resellers[slug].credits||0,name:resellers[slug].name||slug});
-      return;
-    }
-
-    // ── RESELLER GENERATE KEY ───────────────
-    if(action==='reseller_generate_key'){
-      const { username, password, expires_at, label } = req.body||{};
-      if(!username||!password){res.json({success:false,message:"Unauthorized!"});return;}
-      const {data:resellers,sha:rSha} = await getResellers();
-      const slug = username.toLowerCase();
-      if(!resellers[slug]||resellers[slug].password!==password){
-        res.json({success:false,message:"Unauthorized!"});return;
-      }
-      if((resellers[slug].credits||0)<=0){
-        res.json({success:false,message:"No credits! Contact admin."});return;
-      }
-      // Deduct 1 credit
-      resellers[slug].credits = (resellers[slug].credits||0)-1;
-      await updateFile('resellers.json',resellers,rSha,"Credit used by: "+slug);
-
-      // Generate key
-      const {data:keys,sha:kSha} = await getFile('keys.json');
-      const key = makeKey();
-      keys[key] = {
-        label: label||resellers[slug].name||slug,
-        created_at: new Date().toISOString(),
-        expires_at: expires_at||null,
-        duration:'',
-        device_id:null,
-        locked_at:null,
-        active:true,
-        reseller:slug
-      };
-      await updateFile('keys.json',keys,kSha,"Key by reseller: "+slug);
-
-      res.json({success:true,key,credits_left:resellers[slug].credits});
       return;
     }
 
@@ -229,79 +139,9 @@ module.exports = async (req, res) => {
       res.json({success:true,maintenance});return;
     }
 
-    // ── GET RESELLERS (Admin) ───────────────
-    if(action==='get_resellers'){
-      const {data:resellers} = await getResellers();
-      res.json({success:true,resellers});return;
-    }
-
-    // ── CREATE RESELLER ─────────────────────
-    if(action==='create_reseller'){
-      const {username,password,credits,name} = req.body||{};
-      if(!username||!password){res.json({success:false,message:"Username and password required!"});return;}
-      const slug = username.toLowerCase().replace(/[^a-z0-9]/g,'');
-      if(!slug){res.json({success:false,message:"Invalid username!"});return;}
-      const {data:resellers,sha} = await getResellers();
-      if(resellers[slug]){res.json({success:false,message:"Reseller already exists!"});return;}
-      resellers[slug] = {
-        name: name||username,
-        password,
-        credits: parseInt(credits)||0,
-        created_at: new Date().toISOString(),
-        active:true
-      };
-      await updateFile('resellers.json',resellers,sha,"Reseller created: "+slug);
-      res.json({success:true,message:"Reseller created!",slug});return;
-    }
-
-    // ── DELETE RESELLER ─────────────────────
-    if(action==='delete_reseller'){
-      const {username} = req.body||{};
-      const slug = (username||'').toLowerCase();
-      const {data:resellers,sha} = await getResellers();
-      if(!resellers[slug]){res.json({success:false,message:"Not found!"});return;}
-      delete resellers[slug];
-      await updateFile('resellers.json',resellers,sha,"Reseller deleted: "+slug);
-      res.json({success:true,message:"Reseller deleted!"});return;
-    }
-
-    // ── ADD CREDITS ─────────────────────────
-    if(action==='add_credits'){
-      const {username,credits} = req.body||{};
-      const slug = (username||'').toLowerCase();
-      const {data:resellers,sha} = await getResellers();
-      if(!resellers[slug]){res.json({success:false,message:"Reseller not found!"});return;}
-      resellers[slug].credits = (resellers[slug].credits||0)+parseInt(credits||0);
-      await updateFile('resellers.json',resellers,sha,"Credits added to: "+slug);
-      res.json({success:true,message:"Credits added!",credits:resellers[slug].credits});return;
-    }
-
-    // ── REMOVE CREDITS ──────────────────────
-    if(action==='remove_credits'){
-      const {username,credits} = req.body||{};
-      const slug = (username||'').toLowerCase();
-      const {data:resellers,sha} = await getResellers();
-      if(!resellers[slug]){res.json({success:false,message:"Reseller not found!"});return;}
-      resellers[slug].credits = Math.max(0,(resellers[slug].credits||0)-parseInt(credits||0));
-      await updateFile('resellers.json',resellers,sha,"Credits removed from: "+slug);
-      res.json({success:true,message:"Credits removed!",credits:resellers[slug].credits});return;
-    }
-
-    // ── SET CREDITS ─────────────────────────
-    if(action==='set_credits'){
-      const {username,credits} = req.body||{};
-      const slug = (username||'').toLowerCase();
-      const {data:resellers,sha} = await getResellers();
-      if(!resellers[slug]){res.json({success:false,message:"Reseller not found!"});return;}
-      resellers[slug].credits = Math.max(0,parseInt(credits||0));
-      await updateFile('resellers.json',resellers,sha,"Credits set for: "+slug);
-      res.json({success:true,message:"Credits updated!",credits:resellers[slug].credits});return;
-    }
-
     res.json({success:false,message:"Unknown action!"});
 
   }catch(err){
     res.status(500).json({success:false,message:"Error: "+err.message});
   }
 };
-                
