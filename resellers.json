@@ -1,1 +1,9 @@
-{}
+{
+  "rahul": {
+    "name": "rahul",
+    "password": "5151",
+    "credits": 10,
+    "created_at": "2026-05-14T07:29:34.168Z",
+    "active": true
+  }
+}
