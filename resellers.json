@@ -1,11 +1,4 @@
 {
-  "tum": {
-    "name": "tum",
-    "password": "55",
-    "credits": 10,
-    "created_at": "2026-05-14T06:55:56.152Z",
-    "active": true
-  },
   "fergive": {
     "name": "fergive",
     "password": "1212",
