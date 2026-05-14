@@ -63,5 +63,15 @@
     "device_id": null,
     "locked_at": null,
     "active": true
+  },
+  "FERGIVE-OS-F347K-BM2QG": {
+    "label": "ipumods",
+    "created_at": "2026-05-14T12:45:32.635Z",
+    "expires_at": "2026-05-15T12:45:30.721Z",
+    "duration": "",
+    "device_id": null,
+    "locked_at": null,
+    "active": true,
+    "reseller": "ipumods"
   }
 }
