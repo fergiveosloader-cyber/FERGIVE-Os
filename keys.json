@@ -7,5 +7,15 @@
     "device_id": "WDX-465658006093",
     "locked_at": "2026-05-13T17:03:17.467Z",
     "active": true
+  },
+  "FERGIVE-OS-JJXRY-RD26L": {
+    "label": "sonam",
+    "created_at": "2026-05-14T02:45:33.598Z",
+    "expires_at": "2026-05-14T02:55:31.993Z",
+    "duration": "",
+    "device_id": null,
+    "locked_at": null,
+    "active": true,
+    "reseller": "sonam"
   }
 }
