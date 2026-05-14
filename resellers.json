@@ -19,5 +19,12 @@
     "credits": 10,
     "created_at": "2026-05-14T06:55:56.152Z",
     "active": true
+  },
+  "fergive": {
+    "name": "fergive",
+    "password": "1212",
+    "credits": 10,
+    "created_at": "2026-05-14T07:08:26.600Z",
+    "active": true
   }
 }
