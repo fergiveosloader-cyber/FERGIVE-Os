@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>FERGIVE OS — Reseller</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06060a;--s1:#0d0d14;--s2:#13131c;--s3:#1a1a26;
+  --br:#222233;--br2:#2e2e45;
+  --g:#7c3aed;
+  --red:#ff3860;--yellow:#ffb800;--blue:#00d4ff;
+  --t1:#eeeeff;--t2:#7777aa;--t3:#3a3a5c;
+  --glow:0 0 24px rgba(124,58,237,.35);
+}
+body{background:var(--bg);color:var(--t1);font-family:'Space Mono',monospace;min-height:100vh;padding-bottom:60px;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(124,58,237,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;z-index:0}
+.topbar{background:rgba(13,13,20,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--br);padding:14px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+.tb-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#7c3aed,#00d4ff);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;font-family:'Syne',sans-serif;box-shadow:var(--glow)}
+.tb-title{font-size:15px;font-weight:700;font-family:'Syne',sans-serif;letter-spacing:2px}
+.tb-title span{color:var(--g)}
+.tb-badge{margin-left:auto;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);color:var(--blue);font-size:8px;font-weight:700;letter-spacing:2px;padding:4px 10px;border-radius:20px}
+.tb-dot{width:7px;height:7px;border-radius:50%;background:#00d4ff;box-shadow:0 0 8px #00d4ff;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:88vh;padding:20px;position:relative;z-index:1}
+.login-card{background:var(--s1);border:1px solid var(--br2);border-radius:18px;padding:32px;width:100%;max-width:360px;box-shadow:0 0 60px rgba(124,58,237,.15);position:relative;overflow:hidden}
+.login-card::before{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;background:radial-gradient(circle,rgba(124,58,237,.2),transparent 70%);pointer-events:none}
+.login-logo{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:4px}
+.login-logo span{background:linear-gradient(90deg,#7c3aed,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.login-sub{font-size:9px;color:var(--t3);letter-spacing:2px;margin-bottom:8px}
+.reseller-name-display{font-size:11px;color:var(--blue);letter-spacing:2px;margin-bottom:24px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);padding:8px 12px;border-radius:8px;text-align:center}
+
+.card{background:var(--s1);border:1px solid var(--br);border-radius:14px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(124,58,237,.4),transparent)}
+.card-head{font-size:8px;font-weight:700;color:var(--t3);letter-spacing:3px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+
+.credits-display{text-align:center;padding:24px;background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(0,212,255,.05));border:1px solid rgba(124,58,237,.2);border-radius:14px;margin-bottom:14px;position:relative;z-index:1}
+.credits-num{font-size:52px;font-weight:800;font-family:'Syne',sans-serif;background:linear-gradient(90deg,#7c3aed,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.credits-label{font-size:8px;color:var(--t3);letter-spacing:3px;margin-top:8px}
+.credits-sub{font-size:9px;color:var(--t2);margin-top:4px}
+
+.lbl{font-size:9px;color:var(--t3);letter-spacing:1px;margin-bottom:5px;margin-top:12px;display:block}
+.lbl:first-child{margin-top:0}
+.inp{width:100%;background:var(--s2);border:1px solid var(--br2);border-radius:10px;color:var(--t1);font-family:'Space Mono',monospace;font-size:13px;padding:11px 14px;outline:none;transition:all .2s}
+.inp:focus{border-color:rgba(124,58,237,.5);box-shadow:0 0 0 3px rgba(124,58,237,.08)}
+.inp::placeholder{color:var(--t3)}
+select.inp option{background:var(--s2)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+.btn{width:100%;margin-top:14px;padding:13px;border:none;border-radius:10px;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .2s}
+.btn-g{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;box-shadow:0 4px 20px rgba(124,58,237,.35)}
+.btn-g:hover{box-shadow:0 6px 28px rgba(124,58,237,.5);transform:translateY(-1px)}
+.btn-g:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-s{background:var(--s2);border:1px solid var(--br2);color:var(--t2)}
+.btn-r{background:rgba(255,56,96,.07);border:1px solid rgba(255,56,96,.2);color:var(--red)}
+.btn-blue{background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.2);color:var(--blue)}
+.btn-sm{padding:7px 14px;font-size:9px;border-radius:8px;margin-top:0;width:auto}
+
+.result-box{background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.2);border-radius:12px;padding:18px;margin-top:14px;display:none;text-align:center;position:relative;overflow:hidden}
+.result-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(124,58,237,.15),transparent 70%);pointer-events:none}
+.result-key{font-size:15px;font-weight:700;font-family:'Syne',sans-serif;background:linear-gradient(90deg,#7c3aed,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;word-break:break-all;cursor:pointer;margin-bottom:8px}
+.result-meta{font-size:9px;color:var(--t3);margin-top:4px}
+
+.key-item{background:var(--s2);border:1px solid var(--br);border-radius:12px;padding:14px;margin-bottom:10px;transition:border .2s}
+.key-item.expired{opacity:.4}
+.ki-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
+.ki-key{font-size:11px;font-weight:700;word-break:break-all;cursor:pointer;flex:1;font-family:'Syne',sans-serif;letter-spacing:1px;background:linear-gradient(90deg,#7c3aed,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.key-item.expired .ki-key{background:none;-webkit-text-fill-color:var(--t3)}
+.ki-actions{display:flex;gap:6px;flex-shrink:0}
+.ki-btn{background:none;border:none;cursor:pointer;padding:4px 10px;border-radius:6px;font-family:'Space Mono',monospace;font-size:8px;font-weight:700;letter-spacing:.5px}
+.ki-btn-reset{color:var(--blue);border:1px solid rgba(0,212,255,.25);background:rgba(0,212,255,.06)}
+.ki-btn-del{color:var(--red);border:1px solid rgba(255,56,96,.25);background:rgba(255,56,96,.06)}
+.ki-info{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px}
+.ki-field{font-size:9px;color:var(--t3);line-height:1.8}
+.ki-field span{color:var(--t2)}
+.device-section{background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.12);border-radius:8px;padding:8px 12px;margin-top:6px}
+.device-label{font-size:7px;color:var(--blue);letter-spacing:2px;font-weight:700;margin-bottom:3px}
+.device-id{font-size:10px;color:#a0e4ff;word-break:break-all}
+.badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:7px;font-weight:700;letter-spacing:1px}
+.b-valid{background:rgba(124,58,237,.1);color:#a78bfa;border:1px solid rgba(124,58,237,.25)}
+.b-expired{background:rgba(255,56,96,.07);color:var(--red);border:1px solid rgba(255,56,96,.15)}
+.b-locked{background:rgba(0,212,255,.08);color:#7ee8fa;border:1px solid rgba(0,212,255,.18)}
+.b-free{background:rgba(255,184,0,.07);color:var(--yellow);border:1px solid rgba(255,184,0,.15)}
+.b-lifetime{background:rgba(124,58,237,.07);color:#c4b5fd;border:1px solid rgba(124,58,237,.15)}
+
+.sbox{padding:11px 14px;border-radius:10px;font-size:10px;margin-top:12px;display:none;line-height:1.8;white-space:pre-line}
+.s-ok{background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.2);color:#a78bfa}
+.s-err{background:rgba(255,56,96,.07);border:1px solid rgba(255,56,96,.2);color:var(--red)}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--s3);border:1px solid var(--br2);color:var(--t1);font-size:10px;padding:10px 18px;border-radius:10px;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;z-index:999;font-family:'Space Mono',monospace;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.toast.show{opacity:1}
+
+.page{display:none;padding:16px;position:relative;z-index:1}
+.page.active{display:block}
+.tabs{display:flex;background:var(--s1);border-bottom:1px solid var(--br);overflow-x:auto;scrollbar-width:none;position:relative;z-index:1}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:14px 20px;font-size:10px;font-weight:700;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;letter-spacing:2px;transition:all .2s;flex-shrink:0}
+.tab.active{color:var(--g);border-bottom-color:var(--g)}
+.empty{text-align:center;padding:32px;font-size:10px;color:var(--t3);letter-spacing:2px}
+.loading-txt{text-align:center;padding:24px;color:var(--t3);font-size:10px;letter-spacing:1px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-icon">FO</div>
+  <div class="tb-title">FERGIVE <span>OS</span></div>
+  <div class="tb-badge" id="topBadge" style="display:none">RESELLER</div>
+  <div class="tb-dot"></div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginPage">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo"><span>FERGIVE OS</span></div>
+      <div class="login-sub">RESELLER PANEL</div>
+      <div class="reseller-name-display" id="resellerNameDisplay">Loading...</div>
+      <span class="lbl">PASSWORD</span>
+      <input class="inp" id="passInput" type="password" placeholder="Enter your password..."/>
+      <button class="btn btn-g" onclick="doLogin()">LOGIN →</button>
+      <div class="sbox" id="loginStatus"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN PANEL -->
+<div id="mainPanel" style="display:none">
+  <div class="tabs">
+    <div class="tab active" data-tab="generate" onclick="switchTab(this)">⚡ Generate</div>
+    <div class="tab" data-tab="mykeys" onclick="switchTab(this)">🗝 My Keys</div>
+    <div class="tab" data-tab="manage" onclick="switchTab(this)">⚙ Manage</div>
+  </div>
+
+  <!-- GENERATE TAB -->
+  <div class="page active" id="page-generate">
+    <div class="credits-display">
+      <div class="credits-num" id="creditsNum">—</div>
+      <div class="credits-label">CREDITS REMAINING</div>
+      <div class="credits-sub">1 credit = 1 key</div>
+    </div>
+    <div class="card">
+      <div class="card-head">GENERATE NEW KEY</div>
+      <span class="lbl">DURATION</span>
+      <div class="row2">
+        <input class="inp" id="durVal" type="number" value="10" min="1"/>
+        <select class="inp" id="durUnit">
+          <option value="minutes">Minutes</option>
+          <option value="hours">Hours</option>
+          <option value="days">Days</option>
+          <option value="months">Months</option>
+          <option value="lifetime">Lifetime</option>
+        </select>
+      </div>
+      <span class="lbl">LABEL (optional)</span>
+      <input class="inp" id="keyLabel" type="text" placeholder="e.g. Customer name"/>
+      <button class="btn btn-g" id="genBtn" onclick="generateKey()">⚡ GENERATE KEY</button>
+      <div class="result-box" id="resultBox">
+        <div style="font-size:8px;color:var(--t3);letter-spacing:2px;margin-bottom:10px">KEY GENERATED ✓</div>
+        <div class="result-key" id="resultKey" onclick="copyText(this.textContent)"></div>
+        <div class="result-meta" id="resultMeta"></div>
+        <div style="font-size:8px;color:rgba(124,58,237,.5);margin-top:8px;letter-spacing:1px">TAP TO COPY</div>
+      </div>
+      <div class="sbox" id="genStatus"></div>
+    </div>
+  </div>
+
+  <!-- MY KEYS TAB -->
+  <div class="page" id="page-mykeys">
+    <div class="card" style="padding:14px">
+      <div class="card-head">
+        MY KEYS
+        <button class="btn btn-s btn-sm" onclick="loadMyKeys()">↻ Refresh</button>
+      </div>
+      <div id="myKeysList"><div class="loading-txt">Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- MANAGE TAB -->
+  <div class="page" id="page-manage">
+    <div class="card">
+      <div class="card-head">MANAGE KEY</div>
+      <span class="lbl">ENTER KEY</span>
+      <input class="inp" id="checkInp" type="text" placeholder="FERGIVE-OS-XXXXX-XXXXX" style="text-transform:uppercase"/>
+      <div class="row2" style="margin-top:14px">
+        <button class="btn btn-s" style="margin-top:0" onclick="checkKey()">CHECK</button>
+        <button class="btn btn-blue" style="margin-top:0" onclick="resetDevice()">RESET DEVICE</button>
+      </div>
+      <button class="btn btn-r" onclick="deleteKey()">DELETE KEY</button>
+      <div class="sbox" id="manageStatus"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'https://fergive-os.vercel.app/api';
+let SLUG = '';
+let PASS = '';
+
+function getResellerSlug(){
+  const parts = window.location.pathname.split('/').filter(Boolean);
+  if(parts.length>=1) return parts[0].toLowerCase();
+  return null;
+}
+
+window.onload = function(){
+  SLUG = getResellerSlug();
+  if(!SLUG){ document.getElementById('resellerNameDisplay').textContent='Invalid link!'; return; }
+  document.getElementById('resellerNameDisplay').textContent = '👤 ' + SLUG.toUpperCase();
+  document.title = `${SLUG.toUpperCase()} — Reseller Panel`;
+};
+
+function doLogin(){
+  const pass = document.getElementById('passInput').value.trim();
+  if(!pass){ showSbox('loginStatus','Enter password!','err'); return; }
+  showSbox('loginStatus','Logging in...','ok');
+  fetch(`${API}?action=reseller_login`,{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({username:SLUG, password:pass})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    if(d.success){
+      PASS = pass;
+      document.getElementById('loginPage').style.display='none';
+      document.getElementById('mainPanel').style.display='block';
+      document.getElementById('topBadge').style.display='block';
+      document.getElementById('creditsNum').textContent = d.reseller.credits;
+    } else {
+      showSbox('loginStatus', d.message||'Login failed!','err');
+    }
+  })
+  .catch(()=>showSbox('loginStatus','Connection error!','err'));
+}
+
+function switchTab(el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('page-'+el.dataset.tab).classList.add('active');
+  if(el.dataset.tab==='mykeys') loadMyKeys();
+}
+
+// ── Generate ───────────────────────────────
+function calcExpiry(v,u){
+  if(u==='lifetime') return null;
+  const d=new Date();
+  if(u==='minutes') d.setMinutes(d.getMinutes()+v);
+  else if(u==='hours') d.setHours(d.getHours()+v);
+  else if(u==='days') d.setDate(d.getDate()+v);
+  else if(u==='months') d.setMonth(d.getMonth()+v);
+  return d.toISOString();
+}
+
+async function generateKey(){
+  const credits = parseInt(document.getElementById('creditsNum').textContent)||0;
+  if(credits<=0){ showSbox('genStatus','No credits! Contact your admin.','err'); return; }
+  const val = parseInt(document.getElementById('durVal').value)||10;
+  const unit = document.getElementById('durUnit').value;
+  const label = document.getElementById('keyLabel').value.trim();
+  const exp = calcExpiry(val,unit);
+  const btn = document.getElementById('genBtn');
+  btn.disabled=true; btn.textContent='Generating...';
+  document.getElementById('resultBox').style.display='none';
+  showSbox('genStatus','Please wait...','ok');
+  try{
+    const r = await fetch(`${API}?action=reseller_generate_key`,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({username:SLUG, password:PASS, expires_at:exp, label:label||SLUG})
+    });
+    const d = await r.json();
+    btn.disabled=false; btn.textContent='⚡ GENERATE KEY';
+    if(d.success){
+      document.getElementById('genStatus').style.display='none';
+      document.getElementById('creditsNum').textContent = d.credits_left;
+      document.getElementById('resultBox').style.display='block';
+      document.getElementById('resultKey').textContent = d.key;
+      document.getElementById('resultMeta').textContent =
+        `${exp?'Expires: '+fmtDate(new Date(exp)):'Lifetime'}  |  Credits left: ${d.credits_left}`;
+      document.getElementById('keyLabel').value='';
+      toast('Key generated!');
+    } else {
+      showSbox('genStatus', d.message||'Failed!','err');
+    }
+  }catch(e){
+    btn.disabled=false; btn.textContent='⚡ GENERATE KEY';
+    showSbox('genStatus','Connection error!','err');
+  }
+}
+
+// ── My Keys ────────────────────────────────
+function loadMyKeys(){
+  document.getElementById('myKeysList').innerHTML='<div class="loading-txt">Loading...</div>';
+  fetch(`${API}?action=reseller_get_keys`,{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({username:SLUG, password:PASS})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    if(!d.success){ document.getElementById('myKeysList').innerHTML='<div class="empty">Failed!</div>'; return; }
+    const entries = Object.entries(d.keys);
+    renderMyKeys(entries);
+  })
+  .catch(()=>{ document.getElementById('myKeysList').innerHTML='<div class="empty">Error!</div>'; });
+}
+
+function renderMyKeys(entries){
+  if(!entries.length){ document.getElementById('myKeysList').innerHTML='<div class="empty">NO KEYS YET</div>'; return; }
+  const now = new Date();
+  entries.sort((a,b)=>new Date(b[1].created_at)-new Date(a[1].created_at));
+  document.getElementById('myKeysList').innerHTML = entries.map(([key,d])=>{
+    const exp = d.expires_at ? new Date(d.expires_at) : null;
+    const isValid = !exp || now < exp;
+    const devId = d.device_id||null;
+    return `
+    <div class="key-item${!isValid?' expired':''}">
+      <div class="ki-header">
+        <div class="ki-key" onclick="copyText('${key}')">${key}</div>
+        <div class="ki-actions">
+          <button class="ki-btn ki-btn-reset" onclick="quickReset('${key}')">RESET</button>
+          <button class="ki-btn ki-btn-del" onclick="quickDelete('${key}')">DEL</button>
+        </div>
+      </div>
+      <div class="ki-info">
+        <div class="ki-field">LABEL <span>${d.label||'—'}</span></div>
+        <div class="ki-field">STATUS <span>${isValid?'Valid':'Expired'}</span></div>
+        <div class="ki-field">CREATED <span>${fmtDate(new Date(d.created_at))}</span></div>
+        <div class="ki-field">EXPIRES <span>${exp?fmtDate(exp):'Lifetime'}</span></div>
+      </div>
+      ${devId?`<div class="device-section"><div class="device-label">🔒 DEVICE LOCKED</div><div class="device-id">${formatDeviceId(devId)}</div></div>`:''}
+      <div class="badges">
+        ${isValid?'<span class="badge b-valid">VALID</span>':'<span class="badge b-expired">EXPIRED</span>'}
+        ${devId?'<span class="badge b-locked">LOCKED</span>':'<span class="badge b-free">UNLOCKED</span>'}
+        ${!exp?'<span class="badge b-lifetime">LIFETIME</span>':''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function quickReset(key){
+  if(!confirm(`Reset device for:\n${key}?`)) return;
+  fetch(`${API}?action=reseller_reset_device`,{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({username:SLUG, password:PASS, key})
+  })
+  .then(r=>r.json())
+  .then(d=>{ toast(d.success?'Device reset!':'Failed!'); if(d.success) loadMyKeys(); })
+  .catch(()=>toast('Error!'));
+}
+
+function quickDelete(key){
+  if(!confirm(`Delete key:\n${key}?`)) return;
+  fetch(`${API}?action=reseller_delete_key`,{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({username:SLUG, password:PASS, key})
+  })
+  .then(r=>r.json())
+  .then(d=>{ toast(d.success?'Deleted!':'Failed!'); if(d.success) loadMyKeys(); })
+  .catch(()=>toast('Error!'));
+}
+
+// ── Manage Tab ─────────────────────────────
+function checkKey(){
+  const key = document.getElementById('checkInp').value.trim().toUpperCase();
+  if(!key){ showSbox('manageStatus','Enter a key!','err'); return; }
+  showSbox('manageStatus','Checking...','ok');
+  fetch(`${API}?action=reseller_get_keys`,{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({username:SLUG, password:PASS})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    if(!d.success){ showSbox('manageStatus','Failed!','err'); return; }
+    const info = d.keys[key];
+    if(!info){ showSbox('manageStatus','Key not found!\n(Only your keys can be managed here)','err'); return; }
+    const exp = info.expires_at ? new Date(info.expires_at) : null;
+    const isValid = !exp || new Date() < exp;
+    showSbox('manageStatus',
+      `Label: ${info.label||'No Label'}\nStatus: ${isValid?'✓ Valid':'✗ Expired'}\nDevice: ${info.device_id?formatDeviceId(info.device_id):'None'}\nExpires: ${exp?fmtDate(exp):'Lifetime'}`,
+      isValid?'ok':'err');
+  })
+  .catch(()=>showSbox('manageStatus','Error!','err'));
+}
+
+function resetDevice(){
+  const key = document.getElementById('checkInp').value.trim().toUpperCase();
+  if(!key){ showSbox('manageStatus','Enter a key!','err'); return; }
+  fetch(`${API}?action=reseller_reset_device`,{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({username:SLUG, password:PASS, key})
+  })
+  .then(r=>r.json())
+  .then(d=>{ showSbox('manageStatus',d.message,d.success?'ok':'err'); if(d.success) toast('Device reset!'); })
+  .catch(()=>showSbox('manageStatus','Error!','err'));
+}
+
+function deleteKey(){
+  const key = document.getElementById('checkInp').value.trim().toUpperCase();
+  if(!key){ showSbox('manageStatus','Enter a key!','err'); return; }
+  if(!confirm(`Delete key:\n${key}?`)) return;
+  fetch(`${API}?action=reseller_delete_key`,{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({username:SLUG, password:PASS, key})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    showSbox('manageStatus',d.message,d.success?'ok':'err');
+    if(d.success){ document.getElementById('checkInp').value=''; toast('Deleted!'); }
+  })
+  .catch(()=>showSbox('manageStatus','Error!','err'));
+}
+
+// ── Utils ──────────────────────────────────
+function formatDeviceId(raw){
+  if(!raw) return '—';
+  let clean = raw.replace(/^WDX-/i,'');
+  const groups = clean.match(/.{1,4}/g)||[clean];
+  return 'DEV-'+groups.join('-');
+}
+function fmtDate(d){
+  return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+
+    d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+}
+function copyText(t){
+  navigator.clipboard.writeText(t).then(()=>toast('Copied!')).catch(()=>{
+    const ta=document.createElement('textarea');
+    ta.value=t; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta); toast('Copied!');
+  });
+}
+function showSbox(id,msg,type){
+  const el=document.getElementById(id);
+  el.textContent=msg; el.className='sbox s-'+(type==='ok'?'ok':'err');
+  el.style.display='block';
+}
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+</script>
+</body>
+</html>
