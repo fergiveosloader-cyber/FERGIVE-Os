@@ -14,18 +14,22 @@
       "use": "@vercel/static"
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/:path*",
-      "destination": "/api/index.js"
+      "src": "/api(.*)",
+      "dest": "api/index.js"
     },
     {
-      "source": "/:slug/login",
-      "destination": "/reseller.html"
+      "src": "/:slug/login",
+      "dest": "/reseller.html"
     },
     {
-      "source": "/:slug",
-      "destination": "/reseller.html"
+      "src": "/:slug",
+      "dest": "/reseller.html"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
     }
   ]
 }
