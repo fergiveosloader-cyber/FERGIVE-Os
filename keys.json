@@ -63,15 +63,5 @@
     "device_id": null,
     "locked_at": null,
     "active": true
-  },
-  "FERGIVE-OS-M5DYZ-MM4TF": {
-    "label": "IPU",
-    "created_at": "2026-05-14T10:53:12.815Z",
-    "expires_at": "2026-05-14T11:03:10.572Z",
-    "duration": "",
-    "device_id": null,
-    "locked_at": null,
-    "active": true,
-    "reseller": "ipumods"
   }
 }
