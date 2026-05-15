@@ -83,5 +83,15 @@
     "locked_at": null,
     "active": true,
     "reseller": "athex"
+  },
+  "FERGIVE-OS-V553N-DPW6B": {
+    "label": "IPU MODS",
+    "created_at": "2026-05-15T04:08:42.640Z",
+    "expires_at": "2026-05-17T04:08:40.499Z",
+    "duration": "",
+    "device_id": null,
+    "locked_at": null,
+    "active": true,
+    "reseller": "ipumods"
   }
 }
