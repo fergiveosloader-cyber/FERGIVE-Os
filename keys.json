@@ -89,8 +89,8 @@
     "created_at": "2026-05-15T04:08:42.640Z",
     "expires_at": "2026-05-17T04:08:40.499Z",
     "duration": "",
-    "device_id": null,
-    "locked_at": null,
+    "device_id": "WDX-465658006093",
+    "locked_at": "2026-05-15T04:09:45.320Z",
     "active": true,
     "reseller": "ipumods"
   }
