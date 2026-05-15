@@ -83,5 +83,15 @@
     "locked_at": "2026-05-15T04:09:45.320Z",
     "active": true,
     "reseller": "ipumods"
+  },
+  "FERGIVE-OS-A4LHR-SUY9P": {
+    "label": "athex",
+    "created_at": "2026-05-15T07:34:11.892Z",
+    "expires_at": "2026-05-25T07:34:10.331Z",
+    "duration": "",
+    "device_id": null,
+    "locked_at": null,
+    "active": true,
+    "reseller": "athex"
   }
 }
