@@ -164,8 +164,8 @@
     "created_at": "2026-05-28T02:03:21.666Z",
     "expires_at": "2026-06-04T02:03:20.992Z",
     "duration": "",
-    "device_id": null,
-    "locked_at": null,
+    "device_id": "WDX-AB327B206D58",
+    "locked_at": "2026-05-28T08:26:12.493Z",
     "active": true
   }
 }
